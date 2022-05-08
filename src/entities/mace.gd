@@ -25,7 +25,7 @@ func _physics_process(delta):
 		
 	
 		var projection : Vector2 = velocity.project(norm)
-		print(projection.dot(norm))
+#		print(projection.dot(norm))
 		if projection.dot(norm) < 0:
 			velocity -= projection
 		
@@ -38,3 +38,12 @@ func _physics_process(delta):
 		
 		var norm = (parent_pos-global_position).normalized()
 		global_position = parent_pos - norm * stretch_length
+
+func _process(delta):
+	if is_swinging():
+		modulate = Color.red
+	else:
+		modulate = Color.white 
+
+func is_swinging():
+	return velocity.length()>200
