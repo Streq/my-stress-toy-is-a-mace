@@ -2,7 +2,7 @@
 
 [ext_resource path="res://src/global/levels.gd" type="Script" id=1]
 [ext_resource path="res://src/global/level.gd" type="Script" id=2]
-[ext_resource path="res://src/level/0.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/level/pacifist.tscn" type="PackedScene" id=3]
 
 [node name="levels" type="Node"]
 script = ExtResource( 1 )

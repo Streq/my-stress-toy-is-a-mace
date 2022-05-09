@@ -4,7 +4,6 @@ signal stress_changed(val)
 
 onready var mace = $hand/mace
 onready var particles = $CPUParticles2D
-onready var death_timer = $death_timer
 
 
 var velocity := Vector2()
@@ -13,15 +12,19 @@ var inertia := Vector2()
 export var speed := 100.0
 export var stress := 0.0 setget set_stress
 export var max_stress := 100.0
-
+export var pacifist := true
+export var stress_rate := 20.0
 var exploding = false
 
 func _ready():
 	Global.current_time = 0.0
 	Global.emit_signal("lost", false)
 	Global.emit_signal("stressed_out", false)
-	connect("stress_changed", $"/root/HUD/HBoxContainer/Control/TextureProgress", "_on_player_stress_changed")
-
+	Global.pacifist = pacifist
+	Global.connect("destress", self, "destress")
+	
+func destress():
+	self.stress = 0.0
 func _physics_process(delta):
 	if !exploding:
 		var dir = InputUtils.get_input_dir().normalized()
@@ -36,11 +39,11 @@ func _physics_process(delta):
 		
 		Global.current_time += delta
 		
-		if !mace.is_swinging():
-			self.stress += delta*20
-		else:
+		if mace.is_swinging() and pacifist:
 			self.stress -= delta*5
-
+		else:
+			self.stress += delta*stress_rate
+			
 func set_stress(val):
 	stress = clamp(val, 0, max_stress)
 	emit_signal("stress_changed", stress)
@@ -51,10 +54,7 @@ func set_stress(val):
 func explode():
 	Global.emit_signal("stressed_out", true)
 	NodeUtils.reparent(particles, get_parent())
-	NodeUtils.reparent(death_timer, get_parent())
 	particles.emitting = true
-	death_timer.wait_time = particles.lifetime
-	death_timer.start()
 	particles.global_position = global_position
 	
 	queue_free()
