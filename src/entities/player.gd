@@ -17,8 +17,8 @@ export var stress_rate := 20.0
 var exploding = false
 
 func _ready():
-	Global.current_time = 0.0
-	Global.current_kills = 0
+	Global.time_current = 0.0
+	Global.kills_current = 0
 	Global.emit_signal("lost", false)
 	Global.emit_signal("stressed_out", false)
 	Global.pacifist = pacifist
@@ -38,7 +38,7 @@ func _physics_process(delta):
 
 		velocity = move_and_slide(velocity + inertia)
 		
-		Global.current_time += delta
+		Global.time_current += delta
 		
 		if mace.is_swinging() and pacifist:
 			self.stress -= delta*5

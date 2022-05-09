@@ -14,4 +14,4 @@ func _ready():
 func _on_pacifist(val):
 	disabled = !val
 	if !disabled:
-		NodeUtils.reparent(self, get_parent())
+		NodeUtils.reparent_deferred(self, get_parent())

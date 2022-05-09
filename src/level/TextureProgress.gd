@@ -7,7 +7,7 @@ func _ready():
 	
 
 func _on_player_stress_changed(val):
-	if value <= val:
+	if val >= value and val > 0.0:
 		modulate = Color.red
 	else:
 		modulate = Color.white

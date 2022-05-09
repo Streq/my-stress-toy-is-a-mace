@@ -1,7 +1,7 @@
 extends Label
 
 func _ready():
-	Global.connect("current_kills", self, "_on_kills_changed")
-	_on_kills_changed(Global.current_kills)
+	Global.connect("kills_current", self, "_on_kills_changed")
+	_on_kills_changed(Global.kills_current)
 func _on_kills_changed(val):
 	text = str(val)
