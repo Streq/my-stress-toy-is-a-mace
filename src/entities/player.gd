@@ -18,6 +18,7 @@ var exploding = false
 
 func _ready():
 	Global.current_time = 0.0
+	Global.current_kills = 0
 	Global.emit_signal("lost", false)
 	Global.emit_signal("stressed_out", false)
 	Global.pacifist = pacifist
