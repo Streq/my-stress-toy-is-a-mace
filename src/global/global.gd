@@ -70,7 +70,7 @@ func _save():
 	}
 	
 	var save_game = File.new()
-	save_game.open("user://savegame.save", File.WRITE)
+	save_game.open("user://stress_toy_mace_savegame.save", File.WRITE)
 	save_game.store_var(save)
 	
 	pass
@@ -78,7 +78,7 @@ func _save():
 func _load():
 	var save_game = File.new()
 
-	if save_game.open("user://savegame.save", File.READ) == 0:
+	if save_game.open("user://stress_toy_mace_savegame.save", File.READ) == 0:
 		var save = save_game.get_var()
 		time_record = save["time"]
 		kills_record = save["kills"]
