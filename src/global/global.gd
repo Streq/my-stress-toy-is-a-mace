@@ -2,9 +2,12 @@ extends Node
 
 signal current_time(val)
 signal current_record(val)
+signal lost(val)
+signal stressed_out(val)
 
 var current_time = 0.0 setget set_current_time
 var current_record = 0.0
+
 
 
 func set_current_time(val):
