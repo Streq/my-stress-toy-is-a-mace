@@ -17,6 +17,7 @@ export var stress_rate := 20.0
 var exploding = false
 
 func _ready():
+	Global._save()
 	Global.time_current = 0.0
 	Global.kills_current = 0
 	Global.emit_signal("lost", false)

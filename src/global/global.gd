@@ -50,7 +50,7 @@ func _on_someone_died():
 		self.kills_current += 1
 
 func _on_lost(val):
-	if val:
+	if val and timer.is_stopped():
 		timer.start()
 	
 func set_kills_current(val):
