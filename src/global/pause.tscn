@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/font/4x5.res" type="BitmapFont" id=1]
+[ext_resource path="res://src/global/pause.gd" type="Script" id=2]
+
+[node name="CanvasLayer" type="CanvasLayer"]
+pause_mode = 2
+layer = 3
+script = ExtResource( 2 )
+
+[node name="Control" type="Control" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="ColorRect" type="ColorRect" parent="Control"]
+modulate = Color( 0, 0, 0, 0.498039 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Node2D" type="Node2D" parent="Control"]
+
+[node name="pause_text" type="Label" parent="Control"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -56.0
+margin_top = -7.0
+margin_right = 56.0
+margin_bottom = 7.0
+grow_horizontal = 2
+custom_fonts/font = ExtResource( 1 )
+text = "pause"
+align = 1

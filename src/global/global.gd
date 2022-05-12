@@ -15,9 +15,10 @@ var time_record = 0.0
 var kills_current := 0 setget set_kills_current
 var kills_record := 0
 
+var tutorial = false
+
 var pacifist = true setget set_pacifist
 var timer : Timer
-
 
 func _ready():
 	_load()

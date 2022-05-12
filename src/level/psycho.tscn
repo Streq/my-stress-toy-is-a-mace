@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://src/entities/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/terrain/walls.tscn" type="PackedScene" id=2]
@@ -10,24 +10,50 @@
 [ext_resource path="res://src/level/PathFollow2D.gd" type="Script" id=13]
 [ext_resource path="res://src/entities/person.tscn" type="PackedScene" id=14]
 [ext_resource path="res://src/level/screen_zone.gd" type="Script" id=17]
-[ext_resource path="res://assets/texture/mouse.png" type="Texture" id=18]
-[ext_resource path="res://assets/texture/wasd.png" type="Texture" id=19]
+
+[sub_resource type="Shader" id=4]
+code = "shader_type canvas_item;
+uniform float blue = 1.0; // you can assign a default value to uniforms
+
+void fragment(){
+	COLOR = texture(TEXTURE, UV+vec2(cos(UV.y*2000.0+TIME*20.0)*0.01,0)); //read from texture
+	COLOR.b = blue;
+}
+"
+
+[sub_resource type="ShaderMaterial" id=5]
+shader = SubResource( 4 )
+shader_param/blue = 1.0
 
 [sub_resource type="Curve2D" id=2]
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 159, 0, 0, 0, 0, 320, 160, 0, 0, 0, 0, 320, 0, 0, 0, 0, 0, 0, 0 )
 }
 
+[sub_resource type="Shader" id=6]
+code = "shader_type canvas_item;
+uniform float red = 1.0; // you can assign a default value to uniforms
+
+void fragment(){
+	float mo = (cos(SCREEN_UV.y*2.0+TIME*2.0)*0.01);
+	COLOR = texture(SCREEN_TEXTURE, SCREEN_UV+vec2(mo - mod(mo,SCREEN_PIXEL_SIZE.x),0)); //read from texture
+}"
+
+[sub_resource type="ShaderMaterial" id=7]
+shader = SubResource( 6 )
+shader_param/red = 1.0
+
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 171, 90 )
 
 [node name="main" type="Node2D"]
+material = SubResource( 5 )
 script = ExtResource( 4 )
 
 [node name="HUD" parent="." instance=ExtResource( 7 )]
 
 [node name="player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 48, 51 )
+position = Vector2( 160, 96 )
 pacifist = false
 stress_rate = 10.0
 
@@ -53,6 +79,17 @@ speed_up_factor = 1.01
 process_mode = 0
 wait_time = 0.5
 autostart = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 0
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+visible = false
+material = SubResource( 7 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+input_pass_on_modal_close_click = false
 
 [node name="screen_zone" type="Area2D" parent="."]
 collision_layer = 0
@@ -91,17 +128,31 @@ to kill some people
 and relieve some stress"
 align = 1
 
-[node name="Wasd" type="Sprite" parent="display"]
+[node name="mouse" type="Label" parent="display"]
 modulate = Color( 0.301961, 0.301961, 0.301961, 1 )
-position = Vector2( 232, 64 )
-texture = ExtResource( 19 )
-centered = false
+margin_left = 64.0
+margin_top = 64.0
+margin_right = 84.0
+margin_bottom = 85.0
+grow_horizontal = 2
+custom_fonts/font = ExtResource( 5 )
+text = "mouse
+to
+swing"
+align = 1
 
-[node name="Mouse" type="Sprite" parent="display"]
+[node name="wasd" type="Label" parent="display"]
 modulate = Color( 0.301961, 0.301961, 0.301961, 1 )
-position = Vector2( 64, 64 )
-texture = ExtResource( 18 )
-centered = false
+margin_left = 232.0
+margin_top = 64.0
+margin_right = 252.0
+margin_bottom = 85.0
+grow_horizontal = 2
+custom_fonts/font = ExtResource( 5 )
+text = "wasd
+to
+move"
+align = 1
 
 [connection signal="timeout" from="Path2D/PathFollow2D/Timer" to="Path2D/PathFollow2D" method="_on_Timer_timeout"]
 [connection signal="body_exited" from="screen_zone" to="screen_zone" method="_on_screen_zone_body_exited"]

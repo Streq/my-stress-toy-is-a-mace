@@ -2,7 +2,9 @@ extends KinematicBody2D
 
 signal stress_changed(val)
 
+onready var hand = $hand/Sprite
 onready var mace = $hand/mace
+onready var sprite = $Sprite
 onready var particles = $CPUParticles2D
 
 
@@ -14,6 +16,7 @@ export var stress := 0.0 setget set_stress
 export var max_stress := 100.0
 export var pacifist := true
 export var stress_rate := 20.0
+export var do_stress := true
 var exploding = false
 
 func _ready():
@@ -24,6 +27,14 @@ func _ready():
 	Global.emit_signal("stressed_out", false)
 	Global.pacifist = pacifist
 	Global.connect("destress", self, "destress")
+	if pacifist:
+		sprite.self_modulate = Color.white
+		hand.self_modulate = Color.white
+		particles.modulate = Color.white
+	else:
+		sprite.self_modulate = Color.red
+		hand.self_modulate = Color.red
+		particles.modulate = Color.red
 	
 func destress():
 	self.stress = 0.0
@@ -39,11 +50,12 @@ func _physics_process(delta):
 
 		velocity = move_and_slide(velocity + inertia)
 		
-		Global.time_current += delta
+		if pacifist:
+			Global.time_current += delta
 		
 		if mace.is_swinging() and pacifist:
 			self.stress -= delta*5
-		else:
+		elif do_stress:
 			self.stress += delta*stress_rate
 			
 func set_stress(val):

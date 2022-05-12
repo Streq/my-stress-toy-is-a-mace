@@ -6,5 +6,5 @@ func _ready():
 	_on_time_changed(Global.time_record)
 
 func _on_time_changed(val):
-	text = "%10.3f" % val
+	text = "%7.3f" % val
 	print(val)

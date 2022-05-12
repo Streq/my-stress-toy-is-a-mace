@@ -1,11 +1,14 @@
 extends KinematicBody2D
 
+signal started_swinging()
+signal stopped_swinging()
 
 var velocity := Vector2()
 export var acceleration := 10.0
 export var length := 10
 export var stretch_length := 20
 
+var _was_swinging = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -38,6 +41,12 @@ func _physics_process(delta):
 		
 		var norm = (parent_pos-global_position).normalized()
 		global_position = parent_pos - norm * stretch_length
+	if is_swinging() and !_was_swinging:
+		emit_signal("started_swinging")
+		_was_swinging = true
+	elif !is_swinging() and _was_swinging:
+		emit_signal("stopped_swinging")
+		_was_swinging = false
 
 func _process(delta):
 	if is_swinging():
