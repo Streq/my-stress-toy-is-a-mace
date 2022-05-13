@@ -10,7 +10,8 @@ extends Node2D
 func _ready():
 	Global.connect("lost", self, "set_invisible")
 	Global.connect("stressed_out", self, "set_invisible")
-
+	yield(get_tree().create_timer(5.0),"timeout")
+	set_invisible(true)
 
 func set_invisible(val):
 	visible = !val
