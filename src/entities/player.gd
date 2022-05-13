@@ -50,7 +50,7 @@ func _physics_process(delta):
 
 		velocity = move_and_slide(velocity + inertia)
 		
-		if pacifist:
+		if pacifist and !Global.tutorial:
 			Global.time_current += delta
 		
 		if mace.is_swinging() and pacifist:
