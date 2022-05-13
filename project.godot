@@ -72,6 +72,7 @@ Levels="*res://src/global/levels.tscn"
 Global="*res://src/global/global.gd"
 HudMenu="*res://src/global/HUD_menu.tscn"
 Pause="*res://src/global/pause.tscn"
+HudMobile="*res://src/global/HUD_Mobile.tscn"
 
 [display]
 

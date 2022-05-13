@@ -40,7 +40,7 @@ func destress():
 	self.stress = 0.0
 func _physics_process(delta):
 	if !exploding:
-		var dir = InputUtils.get_input_dir().normalized()
+		var dir = InputUtils.get_input_dir()
 		
 		var look_dir = InputUtils.get_hand_dir(self).normalized()
 		$Sprite.rotation = look_dir.angle()
