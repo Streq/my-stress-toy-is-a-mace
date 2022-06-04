@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
 signal stress_changed(val)
+export var id := 0
 
 onready var hand = $hand/Sprite
 onready var mace = $hand/mace
@@ -40,9 +41,9 @@ func destress():
 	self.stress = 0.0
 func _physics_process(delta):
 	if !exploding:
-		var dir = InputUtils.get_input_dir()
+		var dir = GlobalController.get_dir(id)
 		
-		var look_dir = InputUtils.get_hand_dir(self).normalized()
+		var look_dir = GlobalController.get_hand_dir(id)
 		$Sprite.rotation = look_dir.angle()
 		
 		velocity = dir*speed

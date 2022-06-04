@@ -3,7 +3,7 @@ extends Node
 
 func _ready():
 	Global.tutorial = true
-	HudMenu.visible = false
+#	HudMenu.visible = false
 
 
 func _exit_tree():

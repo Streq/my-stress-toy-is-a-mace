@@ -1,0 +1,167 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://src/entities/player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/terrain/walls.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/terrain/goal.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/level/main.gd" type="Script" id=4]
+[ext_resource path="res://assets/font/4x5.res" type="BitmapFont" id=5]
+[ext_resource path="res://src/level/donthurt.gd" type="Script" id=6]
+[ext_resource path="res://src/global/HUD_psycho_2_players.tscn" type="PackedScene" id=7]
+[ext_resource path="res://src/level/PathFollow2D.gd" type="Script" id=13]
+[ext_resource path="res://src/entities/person.tscn" type="PackedScene" id=14]
+[ext_resource path="res://src/level/screen_zone.gd" type="Script" id=17]
+
+[sub_resource type="Shader" id=4]
+code = "shader_type canvas_item;
+uniform float blue = 1.0; // you can assign a default value to uniforms
+
+void fragment(){
+	COLOR = texture(TEXTURE, UV+vec2(cos(UV.y*2000.0+TIME*20.0)*0.01,0)); //read from texture
+	COLOR.b = blue;
+}
+"
+
+[sub_resource type="ShaderMaterial" id=5]
+shader = SubResource( 4 )
+shader_param/blue = 1.0
+
+[sub_resource type="Curve2D" id=2]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 159, 0, 0, 0, 0, 320, 160, 0, 0, 0, 0, 320, 0, 0, 0, 0, 0, 0, 0 )
+}
+
+[sub_resource type="Shader" id=6]
+code = "shader_type canvas_item;
+uniform float red = 1.0; // you can assign a default value to uniforms
+
+void fragment(){
+	float mo = (cos(SCREEN_UV.y*2.0+TIME*2.0)*0.01);
+	COLOR = texture(SCREEN_TEXTURE, SCREEN_UV+vec2(mo - mod(mo,SCREEN_PIXEL_SIZE.x),0)); //read from texture
+}"
+
+[sub_resource type="ShaderMaterial" id=7]
+shader = SubResource( 6 )
+shader_param/red = 1.0
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 171, 90 )
+
+[node name="main" type="Node2D"]
+material = SubResource( 5 )
+script = ExtResource( 4 )
+players = 2
+
+[node name="player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 28, 80 )
+pacifist = false
+stress_rate = 10.0
+
+[node name="player2" parent="." instance=ExtResource( 1 )]
+position = Vector2( 284, 80 )
+id = 1
+pacifist = false
+stress_rate = 10.0
+
+[node name="walls" parent="." instance=ExtResource( 2 )]
+tile_data = PoolIntArray( 65535, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 5, 0, 0, 6, 0, 0, 7, 0, 0, 8, 0, 0, 9, 0, 0, 10, 0, 0, 11, 0, 0, 12, 0, 0, 13, 0, 0, 14, 0, 0, 15, 0, 0, 16, 0, 0, 17, 0, 0, 18, 0, 0, 19, 0, 0, 20, 0, 0, 21, 0, 0, 22, 0, 0, 23, 0, 0, 24, 0, 0, 25, 0, 0, 26, 0, 0, 27, 0, 0, 28, 0, 0, 29, 0, 0, 30, 0, 0, 31, 0, 0, 32, 0, 0, 33, 0, 0, 34, 0, 0, 35, 0, 0, 36, 0, 0, 37, 0, 0, 38, 0, 0, 39, 0, 0, 40, 0, 0, 41, 0, 0, 42, 0, 0, 43, 0, 0, 44, 0, 0, 45, 0, 0, 46, 0, 0, 47, 0, 0, 48, 0, 0, 49, 0, 0, 50, 0, 0, 51, 0, 0, 52, 0, 0, 53, 0, 0, 54, 0, 0, 55, 0, 0, 56, 0, 0, 57, 0, 0, 58, 0, 0, 59, 0, 0, 60, 0, 0, 61, 0, 0, 62, 0, 0, 63, 0, 0, 64, 0, 0, 65, 0, 0, 66, 0, 0, 67, 0, 0, 68, 0, 0, 69, 0, 0, 70, 0, 0, 71, 0, 0, 72, 0, 0, 73, 0, 0, 74, 0, 0, 75, 0, 0, 76, 0, 0, 77, 0, 0, 78, 0, 0, 79, 0, 0, 80, 0, 0, 81, 0, 0, 82, 0, 0, 83, 0, 0, 84, 0, 0, 85, 0, 0, 86, 0, 0, 87, 0, 0, 88, 0, 0, 89, 0, 0, 90, 0, 0, 91, 0, 0, 92, 0, 0, 93, 0, 0, 94, 0, 0, 95, 0, 0, 96, 0, 0, 97, 0, 0, 98, 0, 0, 99, 0, 0, 100, 0, 0, 101, 0, 0, 102, 0, 0, 103, 0, 0, 104, 0, 0, 105, 0, 0, 106, 0, 0, 107, 0, 0, 108, 0, 0, 109, 0, 0, 110, 0, 0, 111, 0, 0, 112, 0, 0, 113, 0, 0, 114, 0, 0, 115, 0, 0, 116, 0, 0, 117, 0, 0, 118, 0, 0, 119, 0, 0, 120, 0, 0, 121, 0, 0, 122, 0, 0, 123, 0, 0, 124, 0, 0, 125, 0, 0, 126, 0, 0, 127, 0, 0, 128, 0, 0, 129, 0, 0, 130, 0, 0, 131, 0, 0, 132, 0, 0, 133, 0, 0, 134, 0, 0, 135, 0, 0, 136, 0, 0, 137, 0, 0, 138, 0, 0, 139, 0, 0, 140, 0, 0, 141, 0, 0, 142, 0, 0, 143, 0, 0, 144, 0, 0, 145, 0, 0, 146, 0, 0, 147, 0, 0, 148, 0, 0, 149, 0, 0, 150, 0, 0, 151, 0, 0, 152, 0, 0, 153, 0, 0, 154, 0, 0, 155, 0, 0, 156, 0, 0, 157, 0, 0, 158, 0, 0, 159, 0, 0, 65536, 0, 0, 65695, 0, 0, 131072, 0, 0, 131231, 0, 0, 196608, 0, 0, 196767, 0, 0, 262144, 0, 0, 262303, 0, 0, 327680, 0, 0, 327839, 0, 0, 393216, 0, 0, 393375, 0, 0, 458752, 0, 0, 458911, 0, 0, 524288, 0, 0, 524447, 0, 0, 589824, 0, 0, 589983, 0, 0, 655360, 0, 0, 655519, 0, 0, 720896, 0, 0, 721055, 0, 0, 786432, 0, 0, 786591, 0, 0, 851968, 0, 0, 852127, 0, 0, 917504, 0, 0, 917663, 0, 0, 983040, 0, 0, 983199, 0, 0, 1048576, 0, 0, 1048735, 0, 0, 1114112, 0, 0, 1114271, 0, 0, 1179648, 0, 0, 1179807, 0, 0, 1245184, 0, 0, 1245343, 0, 0, 1310720, 0, 0, 1310879, 0, 0, 1376256, 0, 0, 1376415, 0, 0, 1441792, 0, 0, 1441951, 0, 0, 1507328, 0, 0, 1507487, 0, 0, 1572864, 0, 0, 1573023, 0, 0, 1638400, 0, 0, 1638559, 0, 0, 1703936, 0, 0, 1704095, 0, 0, 1769472, 0, 0, 1769631, 0, 0, 1835008, 0, 0, 1835167, 0, 0, 1900544, 0, 0, 1900703, 0, 0, 1966080, 0, 0, 1966239, 0, 0, 2031616, 0, 0, 2031775, 0, 0, 2097152, 0, 0, 2097311, 0, 0, 2162688, 0, 0, 2162847, 0, 0, 2228224, 0, 0, 2228383, 0, 0, 2293760, 0, 0, 2293919, 0, 0, 2359296, 0, 0, 2359455, 0, 0, 2424832, 0, 0, 2424991, 0, 0, 2490368, 0, 0, 2490527, 0, 0, 2555904, 0, 0, 2556063, 0, 0, 2621440, 0, 0, 2621599, 0, 0, 2686976, 0, 0, 2687135, 0, 0, 2752512, 0, 0, 2752671, 0, 0, 2818048, 0, 0, 2818207, 0, 0, 2883584, 0, 0, 2883743, 0, 0, 2949120, 0, 0, 2949279, 0, 0, 3014656, 0, 0, 3014815, 0, 0, 3080192, 0, 0, 3080351, 0, 0, 3145728, 0, 0, 3145887, 0, 0, 3211264, 0, 0, 3211423, 0, 0, 3276800, 0, 0, 3276959, 0, 0, 3342336, 0, 0, 3342495, 0, 0, 3407872, 0, 0, 3408031, 0, 0, 3473408, 0, 0, 3473567, 0, 0, 3538944, 0, 0, 3539103, 0, 0, 3604480, 0, 0, 3604639, 0, 0, 3670016, 0, 0, 3670175, 0, 0, 3735552, 0, 0, 3735711, 0, 0, 3801088, 0, 0, 3801247, 0, 0, 3866624, 0, 0, 3866783, 0, 0, 3932160, 0, 0, 3932319, 0, 0, 3997696, 0, 0, 3997855, 0, 0, 4063232, 0, 0, 4063391, 0, 0, 4128768, 0, 0, 4128927, 0, 0, 4194304, 0, 0, 4194463, 0, 0, 4259840, 0, 0, 4259999, 0, 0, 4325376, 0, 0, 4325535, 0, 0, 4390912, 0, 0, 4391071, 0, 0, 4456448, 0, 0, 4456607, 0, 0, 4521984, 0, 0, 4522143, 0, 0, 4587520, 0, 0, 4587679, 0, 0, 4653056, 0, 0, 4653215, 0, 0, 4718592, 0, 0, 4718751, 0, 0, 4784128, 0, 0, 4784287, 0, 0, 4849664, 0, 0, 4849823, 0, 0, 4915200, 0, 0, 4915359, 0, 0, 4980736, 0, 0, 4980895, 0, 0, 5046272, 0, 0, 5046431, 0, 0, 5111808, 0, 0, 5111967, 0, 0, 5177344, 0, 0, 5177345, 0, 0, 5177346, 0, 0, 5177347, 0, 0, 5177348, 0, 0, 5177349, 0, 0, 5177350, 0, 0, 5177351, 0, 0, 5177352, 0, 0, 5177353, 0, 0, 5177354, 0, 0, 5177355, 0, 0, 5177356, 0, 0, 5177357, 0, 0, 5177358, 0, 0, 5177359, 0, 0, 5177360, 0, 0, 5177361, 0, 0, 5177362, 0, 0, 5177363, 0, 0, 5177364, 0, 0, 5177365, 0, 0, 5177366, 0, 0, 5177367, 0, 0, 5177368, 0, 0, 5177369, 0, 0, 5177370, 0, 0, 5177371, 0, 0, 5177372, 0, 0, 5177373, 0, 0, 5177374, 0, 0, 5177375, 0, 0, 5177376, 0, 0, 5177377, 0, 0, 5177378, 0, 0, 5177379, 0, 0, 5177380, 0, 0, 5177381, 0, 0, 5177382, 0, 0, 5177383, 0, 0, 5177384, 0, 0, 5177385, 0, 0, 5177386, 0, 0, 5177387, 0, 0, 5177388, 0, 0, 5177389, 0, 0, 5177390, 0, 0, 5177391, 0, 0, 5177392, 0, 0, 5177393, 0, 0, 5177394, 0, 0, 5177395, 0, 0, 5177396, 0, 0, 5177397, 0, 0, 5177398, 0, 0, 5177399, 0, 0, 5177400, 0, 0, 5177401, 0, 0, 5177402, 0, 0, 5177403, 0, 0, 5177404, 0, 0, 5177405, 0, 0, 5177406, 0, 0, 5177407, 0, 0, 5177408, 0, 0, 5177409, 0, 0, 5177410, 0, 0, 5177411, 0, 0, 5177412, 0, 0, 5177413, 0, 0, 5177414, 0, 0, 5177415, 0, 0, 5177416, 0, 0, 5177417, 0, 0, 5177418, 0, 0, 5177419, 0, 0, 5177420, 0, 0, 5177421, 0, 0, 5177422, 0, 0, 5177423, 0, 0, 5177424, 0, 0, 5177425, 0, 0, 5177426, 0, 0, 5177427, 0, 0, 5177428, 0, 0, 5177429, 0, 0, 5177430, 0, 0, 5177431, 0, 0, 5177432, 0, 0, 5177433, 0, 0, 5177434, 0, 0, 5177435, 0, 0, 5177436, 0, 0, 5177437, 0, 0, 5177438, 0, 0, 5177439, 0, 0, 5177440, 0, 0, 5177441, 0, 0, 5177442, 0, 0, 5177443, 0, 0, 5177444, 0, 0, 5177445, 0, 0, 5177446, 0, 0, 5177447, 0, 0, 5177448, 0, 0, 5177449, 0, 0, 5177450, 0, 0, 5177451, 0, 0, 5177452, 0, 0, 5177453, 0, 0, 5177454, 0, 0, 5177455, 0, 0, 5177456, 0, 0, 5177457, 0, 0, 5177458, 0, 0, 5177459, 0, 0, 5177460, 0, 0, 5177461, 0, 0, 5177462, 0, 0, 5177463, 0, 0, 5177464, 0, 0, 5177465, 0, 0, 5177466, 0, 0, 5177467, 0, 0, 5177468, 0, 0, 5177469, 0, 0, 5177470, 0, 0, 5177471, 0, 0, 5177472, 0, 0, 5177473, 0, 0, 5177474, 0, 0, 5177475, 0, 0, 5177476, 0, 0, 5177477, 0, 0, 5177478, 0, 0, 5177479, 0, 0, 5177480, 0, 0, 5177481, 0, 0, 5177482, 0, 0, 5177483, 0, 0, 5177484, 0, 0, 5177485, 0, 0, 5177486, 0, 0, 5177487, 0, 0, 5177488, 0, 0, 5177489, 0, 0, 5177490, 0, 0, 5177491, 0, 0, 5177492, 0, 0, 5177493, 0, 0, 5177494, 0, 0, 5177495, 0, 0, 5177496, 0, 0, 5177497, 0, 0, 5177498, 0, 0, 5177499, 0, 0, 5177500, 0, 0, 5177501, 0, 0, 5177502, 0, 0, 5177503, 0, 0 )
+
+[node name="goal" parent="." instance=ExtResource( 3 )]
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource( 2 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
+rotation = 1.57709
+script = ExtResource( 13 )
+mob = ExtResource( 14 )
+wait = 0.5
+wait_factor = 1.0
+spawn_movement_speed = 0.5
+spawn_movement_speed_min = 0.5
+speed_up_factor = 1.01
+
+[node name="Timer" type="Timer" parent="Path2D/PathFollow2D"]
+process_mode = 0
+wait_time = 0.5
+autostart = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 0
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+visible = false
+material = SubResource( 7 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+input_pass_on_modal_close_click = false
+
+[node name="screen_zone" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 17 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="screen_zone"]
+position = Vector2( 161, 80 )
+shape = SubResource( 3 )
+
+[node name="display" type="Node2D" parent="."]
+z_index = -4096
+script = ExtResource( 6 )
+
+[node name="Label" type="Label" parent="display"]
+modulate = Color( 1, 0, 0, 1 )
+margin_left = 120.0
+margin_top = 72.0
+margin_right = 192.0
+margin_bottom = 86.0
+custom_fonts/font = ExtResource( 5 )
+text = "if you take too long
+you'll stress out!"
+align = 1
+
+[node name="Label2" type="Label" parent="display"]
+modulate = Color( 0.301961, 0.301961, 0.301961, 1 )
+margin_left = 100.0
+margin_top = 48.0
+margin_right = 224.0
+margin_bottom = 69.0
+grow_horizontal = 2
+custom_fonts/font = ExtResource( 5 )
+text = "swing your mace around 
+to kill some people 
+and relieve some stress"
+align = 1
+
+[node name="mouse" type="Label" parent="display"]
+modulate = Color( 0.301961, 0.301961, 0.301961, 1 )
+margin_left = 64.0
+margin_top = 64.0
+margin_right = 84.0
+margin_bottom = 85.0
+grow_horizontal = 2
+custom_fonts/font = ExtResource( 5 )
+text = "mouse
+to
+swing"
+align = 1
+
+[node name="wasd" type="Label" parent="display"]
+modulate = Color( 0.301961, 0.301961, 0.301961, 1 )
+margin_left = 232.0
+margin_top = 64.0
+margin_right = 252.0
+margin_bottom = 85.0
+grow_horizontal = 2
+custom_fonts/font = ExtResource( 5 )
+text = "wasd
+to
+move"
+align = 1
+
+[node name="HUD" parent="." instance=ExtResource( 7 )]
+
+[connection signal="timeout" from="Path2D/PathFollow2D/Timer" to="Path2D/PathFollow2D" method="_on_Timer_timeout"]
+[connection signal="body_exited" from="screen_zone" to="screen_zone" method="_on_screen_zone_body_exited"]
+
+[editable path="goal"]

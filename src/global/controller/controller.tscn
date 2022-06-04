@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://src/global/controller/controller_single_player_mobile.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/global/controller/controller_two_players_mobile.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/global/controller/controller_single_player_desktop.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/global/controller/main_controller.gd" type="Script" id=4]
+
+[node name="controller" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -320.0
+margin_bottom = -160.0
+mouse_filter = 2
+script = ExtResource( 4 )
+
+[node name="desktop" type="Control" parent="."]
+
+[node name="single_player" parent="desktop" instance=ExtResource( 3 )]
+
+[node name="two_player" parent="desktop" instance=ExtResource( 3 )]
+
+[node name="mobile" type="Control" parent="."]
+
+[node name="two_player" parent="mobile" instance=ExtResource( 2 )]
+
+[node name="single_player" parent="mobile" instance=ExtResource( 1 )]
